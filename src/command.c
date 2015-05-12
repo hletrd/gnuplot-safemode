@@ -346,6 +346,7 @@ do_line()
     if (is_system(*inlptr)) {
 	//do_system(inlptr + 1);
     //Vulnerable
+    	fprintf(stderr, "System call is removed.");
 	return (0);
     }
 
@@ -1574,7 +1575,8 @@ print_set_output(char *name, TBOOLEAN datablock, TBOOLEAN append_p)
 #ifdef PIPES
     if (name[0] == '|') {
 	restrict_popen();
-	print_out = popen(name + 1, "w");
+	//print_out = popen(name + 1, "w");
+	fprintf(stderr, "Print attempt blocked");
 	if (!print_out)
 	    perror(name);
 	else
@@ -1584,7 +1586,8 @@ print_set_output(char *name, TBOOLEAN datablock, TBOOLEAN append_p)
 #endif
 
     if (!datablock) {
-	print_out = fopen(name, append_p ? "a" : "w");
+	//print_out = fopen(name, append_p ? "a" : "w");
+    	fprintf(stderr, "Print attempt blocked");
 	if (!print_out) {
 	    perror(name);
 	    return;
@@ -1831,12 +1834,12 @@ save_command()
 #ifdef PIPES
     if (save_file[0]=='|') {
 	restrict_popen();
-	fp = popen(save_file+1,"w");
+	//fp = popen(save_file+1,"w");
     } else
 #endif
     {
     gp_expand_tilde(&save_file);
-    fp = strcmp(save_file,"-") ? loadpath_fopen(save_file,"w") : stdout;
+    //fp = strcmp(save_file,"-") ? loadpath_fopen(save_file,"w") : stdout;
     }
 
     if (!fp)
@@ -1931,6 +1934,7 @@ system_command()
     cmd = try_to_get_string();
     //Vulnerable
     //do_system(cmd);
+    fprintf(stderr, "System call is removed.");
     free(cmd);
 }
 
