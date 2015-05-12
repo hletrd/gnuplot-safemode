@@ -344,7 +344,8 @@ do_line()
      * tokenization and parsing.  This doesn't work inside a bracketed clause.
      */
     if (is_system(*inlptr)) {
-	do_system(inlptr + 1);
+	//do_system(inlptr + 1);
+    //Vulnerable
 	return (0);
     }
 
@@ -1928,7 +1929,8 @@ system_command()
     char *cmd;
     ++c_token;
     cmd = try_to_get_string();
-    do_system(cmd);
+    //Vulnerable
+    //do_system(cmd);
     free(cmd);
 }
 
@@ -2745,7 +2747,8 @@ do_system(const char *cmd)
     if (!cmd)
 	return;
     restrict_popen();
-    winsystem(cmd);
+    //Vulnerable
+    //winsystem(cmd);
 # else /* _Windows */
 /* (am, 19980929)
  * OS/2 related note: cmd.exe returns 255 if called w/o argument.
@@ -2756,7 +2759,8 @@ do_system(const char *cmd)
     if (!cmd)
 	return;
     restrict_popen();
-    system(cmd);
+    //Vulnerable
+    //system(cmd);
 # endif /* !(_Windows) */
 }
 
@@ -2838,7 +2842,8 @@ do_shell()
 {
     screen_ok = FALSE;
     c_token++;
-
+    //Vulnerable
+/*
     if (user_shell) {
 #  if defined(_Windows)
 	if (WinExec(user_shell, SW_SHOWNORMAL) <= 32)
@@ -2847,8 +2852,8 @@ do_shell()
 #  else
 		if (spawnl(P_WAIT, user_shell, NULL) == -1)
 #  endif			/* !(_Windows || DJGPP) */
-		    os_error(NO_CARET, "unable to spawn shell");
-    }
+/*		    os_error(NO_CARET, "unable to spawn shell");
+    }*/
 }
 
 #  elif defined(OS2)
@@ -2859,11 +2864,12 @@ do_shell()
     screen_ok = FALSE;
     c_token++;
 
-    if (user_shell) {
+    //Vulnerable
+    /*if (user_shell) {
 	if (system(user_shell) == -1)
 	    os_error(NO_CARET, "system() failed");
 
-    }
+    }*/
     (void) putc('\n', stderr);
 }
 
@@ -2880,12 +2886,13 @@ do_shell()
     screen_ok = FALSE;
     c_token++;
 
-    if (user_shell) {
+    //Vulnerable
+    /*if (user_shell) {
 	if (system(safe_strncpy(&exec[sizeof(EXEC) - 1], user_shell,
 				sizeof(exec) - sizeof(EXEC) - 1)))
 	    os_error(NO_CARET, "system() failed");
     }
-    (void) putc('\n', stderr);
+    (void) putc('\n', stderr);*/
 }
 
 # endif				/* !MSDOS */
@@ -3069,24 +3076,27 @@ winsystem(const char *s)
     LPSTR execstr;
     LPCSTR p;
 
+    return (0);
+
+    //Vulnerable
     /* get COMSPEC environment variable */
-    char envbuf[81];
+    /*char envbuf[81];
     GetEnvironmentVariable("COMSPEC", envbuf, 80);
     if (*envbuf == NUL)
 	comspec = "\\command.com";
     else
-	comspec = envbuf;
+	comspec = envbuf;*/
     /* if the command is blank we must use command.com */
-    p = s;
+    /*p = s;
     while ((*p == ' ') || (*p == '\n') || (*p == '\r'))
 	p++;
     if (*p == NUL) {
 	WinExec(comspec, SW_SHOWNORMAL);
-    } else {
+    } else {*/
 	/* attempt to run the windows/dos program via windows */
-	if (WinExec(s, SW_SHOWNORMAL) <= 32) {
+	/*if (WinExec(s, SW_SHOWNORMAL) <= 32) {*/
 	    /* attempt to run it as a dos program from command line */
-	    execstr = gp_alloc(strlen(s) + strlen(comspec) + 6,
+	    /*execstr = gp_alloc(strlen(s) + strlen(comspec) + 6,
 			       "winsystem cmdline");
 	    strcpy(execstr, comspec);
 	    strcat(execstr, " /c ");
@@ -3094,11 +3104,11 @@ winsystem(const char *s)
 	    WinExec(execstr, SW_SHOWNORMAL);
 	    free(execstr);
 	}
-    }
+    }*/
 
     /* regardless of the reality return OK - the consequences of */
     /* failure include shutting down Windows */
-    return (0);			/* success */
+    //return (0);			/* success */
 }
 # endif /* USE_OWN_WINSYSTEM_FUNCTION */
 
@@ -3207,7 +3217,8 @@ expand_1level_macros()
 int
 do_system_func(const char *cmd, char **output)
 {
-
+return 0;
+//Vulnerable
 #if defined(VMS) || defined(PIPES)
     int c;
     FILE *f;
