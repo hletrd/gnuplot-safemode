@@ -1,4 +1,8 @@
+Gnuplot-safemode
 
+This Gnuplot fork is safe to run any code. System call and file readability is removed from original gnuplot.
+
+****************************
 The Gnuplot Plotting Utility
 ****************************
 
