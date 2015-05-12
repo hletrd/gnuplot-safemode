@@ -219,7 +219,8 @@ const struct ft_entry GPFAR ft[] =
     {"strftime",  f_strftime},  /* time to string */
     {"strptime",  f_strptime},  /* string to time */
     {"time", f_time},		/* get current time */
-    {"system", f_system},       /* "dynamic backtics" */
+    //Vulnarable
+    //{"system", f_system},       /* "dynamic backtics" */
     {"exist", f_exists},	/* exists("foo") replaces defined(foo) */
     {"exists", f_exists},	/* exists("foo") replaces defined(foo) */
     {"value", f_value},		/* retrieve value of variable known by name */
